@@ -1,27 +1,20 @@
-package com.jtattoo.plaf;
+package pasa.cbentley.jtattoo;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Frame;
-import java.awt.Graphics;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -34,6 +27,10 @@ import javax.swing.UIManager;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.plaf.metal.MetalLookAndFeel;
+
+import com.jtattoo.plaf.AbstractLookAndFeel;
+import com.jtattoo.plaf.AbstractTheme;
+import com.jtattoo.plaf.JTattooUtilities;
 
 /**
  * Integrates Themes and JTattoo into a {@link JFrame} based application and its {@link JMenuBar}.
@@ -77,228 +74,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
  * @version 1.0
  *
  */
-public class JavaSkinManager implements ActionListener, MenuListener {
-
-   /**
-    * Each Theme menu items will be represented by a {@link LafAction}.
-    * @author Charles Bentley
-    *
-    */
-   public class LafAction extends AbstractAction {
-
-      /**
-       * 
-       */
-      private static final long         serialVersionUID = -2891206240367644231L;
-
-      private AbstractLookAndFeel       alf;
-
-      private UIManager.LookAndFeelInfo laf;
-
-      private JMenu                     menu;
-
-      private String                    theme;
-
-      /**
-       * 
-       * @param laf
-       * @param menu the {@link JMenu} that will hold this action
-       * @throws NullPointerException if laf is null
-       */
-      public LafAction(UIManager.LookAndFeelInfo laf, JMenu menu) {
-         super(laf.getName());
-         this.laf = laf;
-         this.menu = menu;
-      }
-
-      /**
-       * 
-       * @param laf
-       * @param theme theme String
-       * @param alf the {@link AbstractLookAndFeel}
-       * @param menu the {@link JMenu} that will hold this action
-       * @throws NullPointerException if laf is null
-       */
-      public LafAction(UIManager.LookAndFeelInfo laf, String theme, AbstractLookAndFeel alf, JMenu menu) {
-         super(laf.getName() + (theme != null ? (" " + theme) : ""));
-         this.laf = laf;
-         this.theme = theme;
-         this.alf = alf;
-         this.menu = menu;
-      }
-
-      /**
-       * 
-       */
-      public void actionPerformed(ActionEvent e) {
-         //System.out.println("LafAction#actionPerformed " + theme);
-         if (theme != null && alf != null) {
-            alf.setMyTheme(theme);
-         }
-         setApplicationLookAndFeel(laf.getClassName());
-         JMenu newMenuSelected = getActionRootMenu();
-         //clear menu of current action
-         if (currentAction != null) {
-            currentAction.getActionRootMenu().setIcon(null);
-         }
-         if (currentActionFav != null) {
-            currentActionFav.getActionRootMenu().setIcon(null);
-            //also deselects the radio button
-
-         }
-         //there might be several
-         if (newMenuSelected != null) {
-            newMenuSelected.setIcon(iconSelection);
-         }
-         //iterate over all menu and set the right icons.
-         if (newMenuSelected == menuFav) {
-            syncReal(this); //
-            currentActionFav = this;
-         } else {
-            //we must clear favs so that when go from fav to regular, selection deselects. setSelected(false) does not work bug?
-            lafButtonGroupFav.clearSelection();
-            syncFav(this);
-            currentAction = this;
-         }
-      }
-
-      public JMenu getActionRootMenu() {
-         return menu;
-      }
-
-      public UIManager.LookAndFeelInfo getInfo() {
-         return laf;
-      }
-
-      public boolean isLf(String lf) {
-         return laf.getClassName().equals(lf);
-      }
-
-      public boolean isMatch(LafAction action) {
-         return isMatch(action.laf.getName(), action.theme);
-      }
-
-      public boolean isMatch(String lafName, String theme2) {
-         if (lafName.equals(laf.getName())) {
-            if (theme == null && theme2 == null) {
-               return true;
-            } else if (theme != null && theme2 != null) {
-               return theme.equals(theme2);
-            }
-         }
-         return false;
-      }
-
-   }
-
-   public static final String BUNDLE_KEY_FAV         = "menu.lookandfeel.favorite";
-
-   public static final String BUNDLE_KEY_FAV_ADD     = "menu.lookandfeel.addfavorite";
-
-   public static final String BUNDLE_KEY_FAV_REMOVE  = "menu.lookandfeel.removefavorite";
-
-   public static final String BUNDLE_KEY_MAIN_MENU   = "menu.lookandfeel.main";
-
-   public static final String BUNDLE_KEY_OTHERS      = "menu.lookandfeel.others";
-
-   public static final String BUNDLE_KEY_SYSTEM      = "menu.lookandfeel.system";
-
-   /**
-    * Key String for {@link Preferences}
-    */
-   public static final String PREF_LOOKANDFEEL       = "LookAndFeel";
-
-   /**
-    * Key for listing Look/Theme favorite
-    * <br>
-    * Its a big String with 
-    */
-   public static final String PREF_LOOKANDFEEL_FAV   = "LookAndFeelFavs";
-
-   /**
-    * Theme Key String for {@link Preferences}
-    */
-   public static final String PREF_LOOKANDFEEL_THEME = "LookAndFeelTheme";
-
-   /**
-    * Simple test method
-    * @param args
-    */
-   public static void main(String[] args) {
-      javax.swing.SwingUtilities.invokeLater(new Runnable() {
-         public void run() {
-            final Preferences prefs = Preferences.userNodeForPackage(JavaSkinManager.class);
-            final JavaSkinManager lfm = new JavaSkinManager(prefs);
-            lfm.setIconSelected(new Icon() {
-               public void paintIcon(Component c, Graphics g, int x, int y) {
-                  g.setColor(Color.blue);
-                  g.fillRect(x, y, 16, 16);
-               }
-
-               public int getIconWidth() {
-                  return 16;
-               }
-
-               public int getIconHeight() {
-                  return 16;
-               }
-            });
-            final JFrame jf = new JFrame("Look and Feel Frame");
-            jf.addWindowListener(new WindowAdapter() {
-               public void windowClosing(WindowEvent e) {
-                  lfm.prefsSave();
-                  System.exit(0);
-               }
-            });
-            JMenuBar mb = new JMenuBar();
-            mb.add(lfm.getRootMenu());
-            JMenu jm = new JMenu("Options");
-            final JRadioButtonMenuItem jiUndecorated = new JRadioButtonMenuItem("Undecorated");
-            jiUndecorated.addActionListener(new ActionListener() {
-               public void actionPerformed(ActionEvent e) {
-                  boolean isDecorated = !jf.isUndecorated();
-                  boolean isDecoSupport = JFrame.isDefaultLookAndFeelDecorated();
-                  System.out.println("isDecorated=" + isDecorated + " isDecoSupport=" + isDecoSupport);
-                  jf.dispose();
-                  jf.setUndecorated(true);
-                  jf.setVisible(true);
-               }
-            });
-            final JRadioButtonMenuItem jiDecorated = new JRadioButtonMenuItem("Decorated");
-            jiDecorated.addActionListener(new ActionListener() {
-               public void actionPerformed(ActionEvent e) {
-                  boolean isUndecorated = jf.isUndecorated();
-                  if (isUndecorated) {
-                     jf.dispose();
-                     jf.setUndecorated(false);
-                     jf.setVisible(true);
-                  }
-               }
-            });
-            ButtonGroup group = new ButtonGroup();
-            group.add(jiDecorated);
-            group.add(jiUndecorated);
-            jm.add(jiDecorated);
-            jm.add(jiUndecorated);
-
-            mb.add(jm);
-            jf.setJMenuBar(mb);
-
-            JButton but = new JButton("Hello World!");
-            jf.getContentPane().add(but);
-            jf.pack();
-            jf.setSize(300, 200);
-            jf.setLocation(400, 400);
-            jf.setVisible(true);
-
-            if (jf.isUndecorated()) {
-               jiUndecorated.setSelected(true);
-            } else {
-               jiDecorated.setSelected(true);
-            }
-         }
-      });
-   }
+public class JavaSkinManager implements IJavaSkinManager, ActionListener, MenuListener {
 
    /**
     * Current active Laf as an {@link Action}.
@@ -374,7 +150,7 @@ public class JavaSkinManager implements ActionListener, MenuListener {
       //first build the menu for the system look and feels
       menuSystem = new JMenu("System");
       menuOthers = new JMenu("Others");
-      menuFav = new JMenu("Favorites");
+      setMenuFavorite(new JMenu("Favorites"));
 
       jmiFavRemove = new JMenuItem("Remove current skin from favorites");
       jmiFavRemove.addActionListener(this);
@@ -382,9 +158,9 @@ public class JavaSkinManager implements ActionListener, MenuListener {
       jmiFavAdd = new JMenuItem("Add current skin to favorites");
       jmiFavAdd.addActionListener(this);
 
-      menuFav.add(jmiFavAdd);
-      menuFav.add(jmiFavRemove);
-      menuFav.addSeparator();
+      getMenuFavorite().add(jmiFavAdd);
+      getMenuFavorite().add(jmiFavRemove);
+      getMenuFavorite().addSeparator();
       //list favorite here
       installSome();
    }
@@ -394,50 +170,37 @@ public class JavaSkinManager implements ActionListener, MenuListener {
     * <br>
     */
    public void actionPerformed(ActionEvent e) {
+      LafAction currentActionNow = getCurrentAction();
       if (e.getSource() == jmiFavAdd) {
          //get current
-         if (currentAction != null) {
+         if (currentActionNow != null) {
             //check if already in the list
-            JMenuItem item = getActionFavMatch(currentAction);
+            JMenuItem item = getActionFavMatch(currentActionNow);
             if (item == null) {
                //create a new lafaction with menufav as root menu
-               LafAction la = new LafAction(currentAction.laf, currentAction.theme, currentAction.alf, menuFav);
+               LafAction la = new LafAction(this, currentActionNow.getLookAndFeelInfo(), currentActionNow.getTheme(), currentActionNow.getAbstractLookAndFeel(), getMenuFavorite());
                //not in the list
                JRadioButtonMenuItem rbm = new JRadioButtonMenuItem(la);
-               lafButtonGroupFav.add(rbm);
-               menuFav.add(rbm);
-               menuFav.setIcon(iconSelection);
+               getLafButtonGroupFav().add(rbm);
+               getMenuFavorite().add(rbm);
+               getMenuFavorite().setIcon(getIconSelection());
                //refresh
-               lafButtonGroupFav.clearSelection();
+               getLafButtonGroupFav().clearSelection();
                rbm.setSelected(true);
-               menuFav.repaint();
+               getMenuFavorite().repaint();
             }
          }
       } else if (e.getSource() == jmiFavRemove) {
-         JMenuItem item = getActionFavMatch(currentAction);
+         JMenuItem item = getActionFavMatch(currentActionNow);
          if (item != null) {
-            lafButtonGroupFav.remove(item);
-            lafButtonGroupFav.clearSelection();
-            menuFav.remove(item);
-            menuFav.setIcon(null);
-            menuFav.repaint();
+            getLafButtonGroupFav().remove(item);
+            getLafButtonGroupFav().clearSelection();
+            getMenuFavorite().remove(item);
+            getMenuFavorite().setIcon(null);
+            getMenuFavorite().repaint();
             //update the favorite string
          }
       }
-   }
-
-   private JMenuItem getActionFavMatch(LafAction ac) {
-      int num = menuFav.getItemCount();
-      for (int i = 0; i < num; i++) {
-         JMenuItem ji = menuFav.getItem(i);
-         if (ji instanceof JRadioButtonMenuItem) {
-            LafAction action = (LafAction) ji.getAction();
-            if (ac.isMatch(action)) {
-               return ji;
-            }
-         }
-      }
-      return null;
    }
 
    /**
@@ -457,12 +220,12 @@ public class JavaSkinManager implements ActionListener, MenuListener {
       myLafActions.add(action);
       JRadioButtonMenuItem buttonLaf = new JRadioButtonMenuItem(action);
       if (lafClassName.equals(initLookClassName) && initThemeName == null) {
-         action.getActionRootMenu().setIcon(iconSelection);
+         action.getActionRootMenu().setIcon(getIconSelection());
          buttonLaf.setSelected(true);
-         currentAction = action;
+         setCurrentAction(action);
       }
       lafButtonGroup.add(buttonLaf);
-      action.menu.add(buttonLaf);
+      action.getMenu().add(buttonLaf);
    }
 
    private void addSeparator(JMenu menu, String lafClassName, String lastLafClassName) {
@@ -504,7 +267,7 @@ public class JavaSkinManager implements ActionListener, MenuListener {
                JMenu menu = new JMenu(laf.getName());
                for (Iterator iterator = listThemes.iterator(); iterator.hasNext();) {
                   String theme = (String) iterator.next();
-                  LafAction action = new LafAction(laf, theme, alf, menu);
+                  LafAction action = new LafAction(this, laf, theme, alf, menu);
                   myLafActions.add(action);
                }
             } catch (Exception e) {
@@ -517,7 +280,7 @@ public class JavaSkinManager implements ActionListener, MenuListener {
             } else {
                menu = menuOthers;
             }
-            LafAction action = new LafAction(laf, menu);
+            LafAction action = new LafAction(this, laf, menu);
             myLafActions.add(action);
          }
       }
@@ -534,12 +297,46 @@ public class JavaSkinManager implements ActionListener, MenuListener {
       return null;
    }
 
+   private JMenuItem getActionFavMatch(LafAction ac) {
+      int num = getMenuFavorite().getItemCount();
+      for (int i = 0; i < num; i++) {
+         JMenuItem ji = getMenuFavorite().getItem(i);
+         if (ji instanceof JRadioButtonMenuItem) {
+            LafAction action = (LafAction) ji.getAction();
+            if (ac.isMatch(action)) {
+               return ji;
+            }
+         }
+      }
+      return null;
+   }
+
+   LafAction getCurrentAction() {
+      return currentAction;
+   }
+
+   LafAction getCurrentActionFav() {
+      return currentActionFav;
+   }
+
    /**
     * Returns the current laf
     * @return
     */
    public String getCurrentLaf() {
       return currentLaf;
+   }
+
+   Icon getIconSelection() {
+      return iconSelection;
+   }
+
+   ButtonGroup getLafButtonGroupFav() {
+      return lafButtonGroupFav;
+   }
+
+   JMenu getMenuFavorite() {
+      return menuFav;
    }
 
    /**
@@ -550,6 +347,29 @@ public class JavaSkinManager implements ActionListener, MenuListener {
     */
    public JMenu getRootMenu() {
       return menuRoot;
+   }
+
+   /**
+    * Optional. By default, all widgets have been initialized with English strings.
+    * <br>
+    * Valid bundle with the following keys
+    * <li> {@link JavaSkinManager#BUNDLE_KEY_FAV}
+    * <li> {@link JavaSkinManager#BUNDLE_KEY_FAV_ADD}
+    * <li> {@link JavaSkinManager#BUNDLE_KEY_FAV_REMOVE}
+    * <li> {@link JavaSkinManager#BUNDLE_KEY_MAIN_MENU}
+    * <li> {@link JavaSkinManager#BUNDLE_KEY_OTHERS}
+    * <li> {@link JavaSkinManager#BUNDLE_KEY_SYSTEM}
+    * 
+    * @param resBundle
+    */
+   public void guiUpdate(ResourceBundle resBundle) {
+      menuRoot.setText(resBundle.getString(BUNDLE_KEY_MAIN_MENU));
+      menuOthers.setText(resBundle.getString(BUNDLE_KEY_OTHERS));
+      menuSystem.setText(resBundle.getString(BUNDLE_KEY_SYSTEM));
+      getMenuFavorite().setText(resBundle.getString(BUNDLE_KEY_FAV));
+      jmiFavAdd.setText(resBundle.getString(BUNDLE_KEY_FAV_ADD));
+      jmiFavRemove.setText(resBundle.getString(BUNDLE_KEY_FAV_REMOVE));
+
    }
 
    /**
@@ -597,7 +417,7 @@ public class JavaSkinManager implements ActionListener, MenuListener {
                   LafAction lag = getAction(lookTheme, null);
                   //look up the existing
                   if (lag != null) {
-                     actionFav = new LafAction(lag.laf, menuFav);
+                     actionFav = new LafAction(this, lag.getLookAndFeelInfo(), getMenuFavorite());
                   }
                } else {
                   //split theme
@@ -606,21 +426,21 @@ public class JavaSkinManager implements ActionListener, MenuListener {
                   LafAction actionRegular = getAction(laf, theme);
                   //look up the existing
                   if (actionRegular != null) {
-                     actionFav = new LafAction(actionRegular.laf, theme, actionRegular.alf, menuFav);
+                     actionFav = new LafAction(this, actionRegular.getLookAndFeelInfo(), theme, actionRegular.getAbstractLookAndFeel(), getMenuFavorite());
                   }
                   //check if init theme and the set cu
-                  String className = actionRegular.laf.getClassName();
+                  String className = actionRegular.getLookAndFeelInfo().getClassName();
                   if (className.equals(initLookClassName) && theme.equals(initThemeName)) {
-                     currentActionFav = actionFav;
-                     currentActionFav.getActionRootMenu().setIcon(iconSelection);
+                     setCurrentActionFav(actionFav);
+                     getCurrentActionFav().getActionRootMenu().setIcon(getIconSelection());
                   }
                }
                JRadioButtonMenuItem rad = new JRadioButtonMenuItem(actionFav);
-               if (currentActionFav == actionFav) {
+               if (getCurrentActionFav() == actionFav) {
                   rad.setSelected(true);
                }
-               lafButtonGroupFav.add(rad);
-               menuFav.add(rad);
+               getLafButtonGroupFav().add(rad);
+               getMenuFavorite().add(rad);
                //check if already
             }
          }
@@ -650,11 +470,11 @@ public class JavaSkinManager implements ActionListener, MenuListener {
       createActions(lafsInstalled);
 
       //add the favorite menu
-      lookAndFeelMenu.add(menuFav);
+      lookAndFeelMenu.add(getMenuFavorite());
       lookAndFeelMenu.add(menuSystem);
 
       lafButtonGroup = new ButtonGroup(); //only 1 LAF button can be selected at a time
-      lafButtonGroupFav = new ButtonGroup();
+      setLafButtonGroupFav(new ButtonGroup());
 
       String lastLafClassName = null;
       for (int i = 0; i < lafsInstalled.length; i++) {
@@ -683,9 +503,9 @@ public class JavaSkinManager implements ActionListener, MenuListener {
                   LafAction action = getAction(lafName, theme);
                   menu = action.getActionRootMenu();
                   if (lafClassName.equals(initLookClassName) && theme.equals(initThemeName)) {
-                     menu.setIcon(iconSelection);
+                     menu.setIcon(getIconSelection());
                      buttonTheme.setSelected(true);
-                     currentAction = action;
+                     setCurrentAction(action);
                   }
                   menu.add(buttonTheme);
                   buttonTheme.setAction(action);
@@ -751,7 +571,7 @@ public class JavaSkinManager implements ActionListener, MenuListener {
             //if success here create the current Laf
             LookAndFeel laf = UIManager.getLookAndFeel();
             UIManager.LookAndFeelInfo lafi = new UIManager.LookAndFeelInfo(laf.getName(), lookFeelClassName);
-            currentAction = new LafAction(lafi, lookFeelTheme, null, null);
+            setCurrentAction(new LafAction(this, lafi, lookFeelTheme, null, null));
          } catch (Exception e) {
             e.printStackTrace();
          }
@@ -773,25 +593,27 @@ public class JavaSkinManager implements ActionListener, MenuListener {
       LookAndFeel laf = UIManager.getLookAndFeel();
       prefs.put(PREF_LOOKANDFEEL, value);
       if (laf instanceof AbstractLookAndFeel) {
+         ////////// WARNING TO READER! NEVER USE STATIC VARIABLES. Its a mistake that bites in the future.
          AbstractLookAndFeel alf = (AbstractLookAndFeel) laf;
          AbstractTheme at = alf.getTheme(); //must be called on instance. ignore IDE warning
          String name = at.getInternalName(); //must be called on instance. ignore IDE warning
+         ////////// All this ugly code because of static variables
          System.out.println("Saving Look and Feel " + value + " " + name);
          prefs.put(PREF_LOOKANDFEEL_THEME, name);
       } else {
          prefs.put(PREF_LOOKANDFEEL_THEME, "");
       }
       //do the favorites
-      int num = menuFav.getItemCount();
+      int num = getMenuFavorite().getItemCount();
       StringBuilder sb = new StringBuilder(100);
       for (int i = 0; i < num; i++) {
-         JMenuItem ji = menuFav.getItem(i);
+         JMenuItem ji = getMenuFavorite().getItem(i);
          if (ji instanceof JRadioButtonMenuItem) {
             LafAction action = (LafAction) ji.getAction();
-            sb.append(action.laf.getName());
-            if (action.theme != null) {
+            sb.append(action.getLookAndFeelInfo().getName());
+            if (action.getTheme() != null) {
                sb.append('.');
-               sb.append(action.theme);
+               sb.append(action.getTheme());
             }
             sb.append(';');
          }
@@ -801,7 +623,14 @@ public class JavaSkinManager implements ActionListener, MenuListener {
       prefs.put(PREF_LOOKANDFEEL_FAV, favString);
    }
 
-   private void setApplicationLookAndFeel(String className) {
+   /**
+    * Tries to set the new look and feel.
+    * 
+    * Method will update the Component Tree.
+    * 
+    * @param className could be null
+    */
+   public void setApplicationLookAndFeel(String className) {
       if (className != null) {
          try {
             LookAndFeel oldLAF = UIManager.getLookAndFeel();
@@ -838,30 +667,50 @@ public class JavaSkinManager implements ActionListener, MenuListener {
       }
    }
 
+   void setCurrentAction(LafAction currentAction) {
+      this.currentAction = currentAction;
+   }
+
+   void setCurrentActionFav(LafAction currentActionFav) {
+      this.currentActionFav = currentActionFav;
+   }
+
    /**
     * Sets the icon that will be displayed next to the selected look and feel menu.
     * <br>
     * @param icon
     */
    public void setIconSelected(Icon icon) {
-      this.iconSelection = icon;
+      this.setIconSelection(icon);
+   }
+
+   void setIconSelection(Icon iconSelection) {
+      this.iconSelection = iconSelection;
+   }
+
+   void setLafButtonGroupFav(ButtonGroup lafButtonGroupFav) {
+      this.lafButtonGroupFav = lafButtonGroupFav;
+   }
+
+   void setMenuFavorite(JMenu menuFav) {
+      this.menuFav = menuFav;
    }
 
    /**
     * Called when a regular Skin is changed. Look up the favorites
     * and if its inside.. select it in the group
     */
-   private void syncFav(LafAction currentAction) {
-      int num = menuFav.getItemCount();
+   public void syncFav(LafAction currentAction) {
+      int num = getMenuFavorite().getItemCount();
       for (int i = 0; i < num; i++) {
-         JMenuItem ji = menuFav.getItem(i);
+         JMenuItem ji = getMenuFavorite().getItem(i);
          //a simple reference check is not sufficient since fav skins have their own action.
          if (ji instanceof JRadioButtonMenuItem) {
             LafAction actionFav = (LafAction) ji.getAction();
             if (currentAction.isMatch(actionFav)) {
                ji.setSelected(true);
-               currentActionFav = actionFav;
-               actionFav.getActionRootMenu().setIcon(iconSelection);
+               setCurrentActionFav(actionFav);
+               actionFav.getActionRootMenu().setIcon(getIconSelection());
                break;
             }
          }
@@ -872,11 +721,11 @@ public class JavaSkinManager implements ActionListener, MenuListener {
    /**
     * Called when a fav item has been selected
     */
-   private void syncReal(LafAction favAction) {
+   public void syncReal(LafAction favAction) {
       int countI = menuRoot.getItemCount();
       for (int i = 0; i < countI; i++) {
          JMenuItem ji = menuRoot.getItem(i);
-         if (ji != menuFav) {
+         if (ji != getMenuFavorite()) {
             if (ji instanceof JMenu) {
                JMenu m = ((JMenu) ji);
                int countK = m.getItemCount();
@@ -888,9 +737,9 @@ public class JavaSkinManager implements ActionListener, MenuListener {
                      if (ac != null && ac instanceof LafAction) {
                         LafAction actionReg = (LafAction) ac;
                         if (favAction.isMatch(actionReg)) {
-                           currentAction = actionReg;
+                           setCurrentAction(actionReg);
                            jik.setSelected(true);
-                           m.setIcon(iconSelection);
+                           m.setIcon(getIconSelection());
                            isSelected = true;
                         }
                      }
@@ -925,29 +774,6 @@ public class JavaSkinManager implements ActionListener, MenuListener {
             }
          }
       }
-   }
-
-   /**
-    * Optional. By default, all widgets have been initialized with English strings.
-    * <br>
-    * Valid bundle with the following keys
-    * <li> {@link JavaSkinManager#BUNDLE_KEY_FAV}
-    * <li> {@link JavaSkinManager#BUNDLE_KEY_FAV_ADD}
-    * <li> {@link JavaSkinManager#BUNDLE_KEY_FAV_REMOVE}
-    * <li> {@link JavaSkinManager#BUNDLE_KEY_MAIN_MENU}
-    * <li> {@link JavaSkinManager#BUNDLE_KEY_OTHERS}
-    * <li> {@link JavaSkinManager#BUNDLE_KEY_SYSTEM}
-    * 
-    * @param resBundle
-    */
-   public void guiUpdate(ResourceBundle resBundle) {
-      menuRoot.setText(resBundle.getString(BUNDLE_KEY_MAIN_MENU));
-      menuOthers.setText(resBundle.getString(BUNDLE_KEY_OTHERS));
-      menuSystem.setText(resBundle.getString(BUNDLE_KEY_SYSTEM));
-      menuFav.setText(resBundle.getString(BUNDLE_KEY_FAV));
-      jmiFavAdd.setText(resBundle.getString(BUNDLE_KEY_FAV_ADD));
-      jmiFavRemove.setText(resBundle.getString(BUNDLE_KEY_FAV_REMOVE));
-
    }
 
 }
