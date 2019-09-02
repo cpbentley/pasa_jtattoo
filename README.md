@@ -1,6 +1,14 @@
 # The JTattoo Project
 
-JTattoo is a look and feel library for swing based applications. JTattoo consists of several different look and feels wich may also improve your java application with an excellent user interface.
+JTattoo is a look and feel library for swing based applications. JTattoo consists of several different look and feels which may also improve your java application with an excellent user interface.
+
+# Why The Fork? 
+
+The pasa.cbentley.jtattoo package provides a JavaSkinManager for dynamically loading available skins.
+
+In order to achieve dynamic discovery of look and feel along with their themes, I had to modify every JTattoo themes with a few methods.
+
+I don't use Maven for it. So you will have to manually download it and link it.
 
 ## Links
 
@@ -10,17 +18,4 @@ JTattoo is a look and feel library for swing based applications. JTattoo consist
 
 - Download Page: http://www.jtattoo.net/Download.html
 
-- Maven Repository:
-```xml
-        <dependency>
-            <groupId>com.jtattoo</groupId>
-            <artifactId>JTattoo</artifactId>
-            <version>1.6.12</version>
-        </dependency>
-```
 
-## Developer Information
-
-- JTattoo is setup to build using [Maven](http://maven.apache.org)
-
-- You need JDK 6 or later  to __build__ and run JTattoo.
