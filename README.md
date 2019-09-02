@@ -4,11 +4,13 @@ JTattoo is a look and feel library for swing based applications. JTattoo consist
 
 # Why The Fork? 
 
-The pasa.cbentley.jtattoo package provides a JavaSkinManager for dynamically loading available skins.
+The **pasa.cbentley.jtattoo** package provides a **JavaSkinManager** for dynamically loading available skins.
 
 In order to achieve dynamic discovery of look and feel along with their themes, I had to modify every JTattoo themes with a few methods.
 
 I don't use Maven with it. So you will have to manually download it and link it.
+
+Run demo **with pasa.cbentley.jtattoo.RunJavaSkinManagerDemo**
 
 ## Eclipse Compatible
 
