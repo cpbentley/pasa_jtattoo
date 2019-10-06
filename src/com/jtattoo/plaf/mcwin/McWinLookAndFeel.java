@@ -124,22 +124,22 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
         pinkProps.setProperty("menuSelectionBackgroundColor", "248 202 248");
         pinkProps.setProperty("desktopColor", "242 242 242");
         
-        pascalProps.setProperty("backgroundColorLight", "255 220 180");
-        pascalProps.setProperty("backgroundColorDark", "240 240 240");
+        pascalProps.setProperty("backgroundColorLight", "255 255 255");
+        pascalProps.setProperty("backgroundColorDark", "255 250 240");
         pascalProps.setProperty("focusCellColor", "255 125 80");
         pascalProps.setProperty("selectionBackgroundColor", "255 125 80");
-        pascalProps.setProperty("rolloverColor", "255 125 80");
-        pascalProps.setProperty("controlColorLight", "255 215 0");
-        pascalProps.setProperty("controlColorDark", "232 120 0");
-        pascalProps.setProperty("rolloverColorLight", "255 215 0"); //main color gradient button
-        pascalProps.setProperty("rolloverColorDark", "232 120 0"); //color of gradient button
+        pascalProps.setProperty("rolloverColor", "255 215 50");
+        pascalProps.setProperty("controlColorLight", "255 125 80");
+        pascalProps.setProperty("controlColorDark", "255 110 70");
+        pascalProps.setProperty("rolloverColorLight", "255 215 50"); //main color gradient button
+        pascalProps.setProperty("rolloverColorDark", "255 110 70"); //color of gradient button
         pascalProps.setProperty("windowTitleForegroundColor", "0 0 0");
-        pascalProps.setProperty("windowTitleBackgroundColor", "255 165 0");
-        pascalProps.setProperty("windowTitleColorLight", "255 125 80");
-        pascalProps.setProperty("windowTitleColorDark", "220 100 50");
-        pascalProps.setProperty("windowBorderColor", "200 120 200");
+        pascalProps.setProperty("windowTitleBackgroundColor", "0 0 0");
+        pascalProps.setProperty("windowTitleColorLight", "158 158 158"); //top gradient color of window
+        pascalProps.setProperty("windowTitleColorDark", "255 125 80"); //bottom gradient color of window
+        pascalProps.setProperty("windowBorderColor", "255 125 80"); 
         pascalProps.setProperty("menuSelectionForegroundColor", "40 40 40");
-        pascalProps.setProperty("menuSelectionBackgroundColor", "255 110 70");
+        pascalProps.setProperty("menuSelectionBackgroundColor", "255 125 80");
         pascalProps.setProperty("desktopColor", "255 125 80");
 
         String key;
