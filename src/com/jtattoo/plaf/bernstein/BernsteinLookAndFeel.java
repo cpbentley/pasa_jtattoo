@@ -39,6 +39,7 @@ public class BernsteinLookAndFeel extends AbstractLookAndFeel {
     private static final Properties smallFontProps = new Properties();
     private static final Properties largeFontProps = new Properties();
     private static final Properties giantFontProps = new Properties();
+    private static final Properties hugeFontProps = new Properties();
 
     static {
         smallFontProps.setProperty("controlTextFont", "Dialog 10");
@@ -62,15 +63,25 @@ public class BernsteinLookAndFeel extends AbstractLookAndFeel {
         giantFontProps.setProperty("windowTitleFont", "Dialog 18");
         giantFontProps.setProperty("subTextFont", "Dialog 16");
 
-        themesList.add("Default");
+        hugeFontProps.setProperty("controlTextFont", "Dialog 20");
+        hugeFontProps.setProperty("systemTextFont", "Dialog 20");
+        hugeFontProps.setProperty("userTextFont", "Dialog 20");
+        hugeFontProps.setProperty("menuTextFont", "Dialog 20");
+        hugeFontProps.setProperty("windowTitleFont", "Dialog 20");
+        hugeFontProps.setProperty("subTextFont", "Dialog 18");
+
+        
         themesList.add("Small-Font");
+        themesList.add("Medium-Font");
         themesList.add("Large-Font");
         themesList.add("Giant-Font");
+        themesList.add("Huge-Font");
 
-        themesMap.put("Default", defaultProps);
         themesMap.put("Small-Font", smallFontProps);
+        themesMap.put("Medium-Font", defaultProps);
         themesMap.put("Large-Font", largeFontProps);
         themesMap.put("Giant-Font", giantFontProps);
+        themesMap.put("Huge-Font", hugeFontProps);
     }
 
     public static java.util.List getThemes() {

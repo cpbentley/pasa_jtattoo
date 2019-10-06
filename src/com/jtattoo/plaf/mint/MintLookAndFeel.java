@@ -62,13 +62,13 @@ public class MintLookAndFeel extends AbstractLookAndFeel {
         giantFontProps.setProperty("windowTitleFont", "Dialog 18");
         giantFontProps.setProperty("subTextFont", "Dialog 16");
 
-        themesList.add("Default");
         themesList.add("Small-Font");
+        themesList.add("Medium-Font");
         themesList.add("Large-Font");
         themesList.add("Giant-Font");
 
-        themesMap.put("Default", defaultProps);
         themesMap.put("Small-Font", smallFontProps);
+        themesMap.put("Medium-Font", defaultProps);
         themesMap.put("Large-Font", largeFontProps);
         themesMap.put("Giant-Font", giantFontProps);
 
