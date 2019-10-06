@@ -150,11 +150,15 @@ public class AeroLookAndFeel extends AbstractLookAndFeel {
         themesList.add("Large-Font");
         themesList.add("Giant-Font");
         
+        themesList.add(THEME_SEPARATOR);
+
         themesList.add("Gold");
         themesList.add("Gold-Small-Font");
         themesList.add("Gold-Large-Font");
         themesList.add("Gold-Giant-Font");
-        
+
+        themesList.add(THEME_SEPARATOR);
+
         themesList.add("Green");
         themesList.add("Green-Small-Font");
         themesList.add("Green-Large-Font");

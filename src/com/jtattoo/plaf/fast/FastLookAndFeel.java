@@ -150,28 +150,36 @@ public class FastLookAndFeel extends AbstractLookAndFeel {
             greenGiantFontProps.setProperty(key, value);
         }
 
-        themesList.add("Default");
         themesList.add("Small-Font");
+        themesList.add("Medium-Font");
         themesList.add("Large-Font");
         themesList.add("Giant-Font");
-        themesList.add("Blue");
+        
+        themesList.add(THEME_SEPARATOR);
+        
         themesList.add("Blue-Small-Font");
+        themesList.add("Blue-Medium-Font");
         themesList.add("Blue-Large-Font");
         themesList.add("Blue-Giant-Font");
-        themesList.add("Green");
+
+        themesList.add(THEME_SEPARATOR);
+
         themesList.add("Green-Small-Font");
+        themesList.add("Green-Medium-Font");
         themesList.add("Green-Large-Font");
         themesList.add("Green-Giant-Font");
 
-        themesMap.put("Default", defaultProps);
+        themesMap.put("Medium-Font", defaultProps);
         themesMap.put("Small-Font", smallFontProps);
         themesMap.put("Large-Font", largeFontProps);
         themesMap.put("Giant-Font", giantFontProps);
-        themesMap.put("Blue", blueProps);
+        
+        themesMap.put("Blue-Medium-Font", blueProps);
         themesMap.put("Blue-Small-Font", blueSmallFontProps);
         themesMap.put("Blue-Large-Font", blueLargeFontProps);
         themesMap.put("Blue-Giant-Font", blueGiantFontProps);
-        themesMap.put("Green", greenProps);
+        
+        themesMap.put("Green-Medium-Font", greenProps);
         themesMap.put("Green-Small-Font", greenSmallFontProps);
         themesMap.put("Green-Large-Font", greenLargeFontProps);
         themesMap.put("Green-Giant-Font", greenGiantFontProps);

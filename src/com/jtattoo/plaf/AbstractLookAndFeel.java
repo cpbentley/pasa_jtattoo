@@ -37,7 +37,9 @@ import javax.swing.plaf.metal.MetalTheme;
  */
 abstract public class AbstractLookAndFeel extends MetalLookAndFeel {
 
-    protected static String currentThemeName = "abstractTheme";
+    public static final String THEME_SEPARATOR = "themeSeparator";
+
+   protected static String currentThemeName = "abstractTheme";
 
     private static AbstractTheme myTheme = null;
     

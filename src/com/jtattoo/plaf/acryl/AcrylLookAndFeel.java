@@ -214,15 +214,21 @@ public class AcrylLookAndFeel extends AbstractLookAndFeel {
         themesList.add("Large-Font");
         themesList.add("Giant-Font");
 
+        themesList.add(THEME_SEPARATOR);
+
         themesList.add("Green");
         themesList.add("Green-Small-Font");
         themesList.add("Green-Large-Font");
         themesList.add("Green-Giant-Font");
 
+        themesList.add(THEME_SEPARATOR);
+
         themesList.add("Lemmon");
         themesList.add("Lemmon-Small-Font");
         themesList.add("Lemmon-Large-Font");
         themesList.add("Lemmon-Giant-Font");
+
+        themesList.add(THEME_SEPARATOR);
 
         themesList.add("Red");
         themesList.add("Red-Small-Font");

@@ -296,15 +296,21 @@ public class TextureLookAndFeel extends AbstractLookAndFeel {
         themesList.add("Medium-Font");
         themesList.add("Large-Font");
 
+        themesList.add(THEME_SEPARATOR);
+
         themesList.add("Rock");
         themesList.add("Rock-Small-Font");
         themesList.add("Rock-Medium-Font");
         themesList.add("Rock-Large-Font");
 
+        themesList.add(THEME_SEPARATOR);
+
         themesList.add("Textile");
         themesList.add("Textile-Small-Font");
         themesList.add("Textile-Medium-Font");
         themesList.add("Textile-Large-Font");
+
+        themesList.add(THEME_SEPARATOR);
 
         themesList.add("Snow");
         themesList.add("Snow-Small-Font");

@@ -184,15 +184,20 @@ public class GraphiteLookAndFeel extends AbstractLookAndFeel {
         themesList.add("Medium-Font");
         themesList.add("Large-Font");
 
+        themesList.add(THEME_SEPARATOR);
+
         themesList.add("Green");
         themesList.add("Green-Small-Font");
         themesList.add("Green-Medium-Font");
         themesList.add("Green-Large-Font");
 
+        themesList.add(THEME_SEPARATOR);
+
         themesList.add("Blue");
         themesList.add("Blue-Small-Font");
         themesList.add("Blue-Medium-Font");
         themesList.add("Blue-Large-Font");
+
 
         themesMap.put("Default", defaultProps);
         themesMap.put("Small-Font", smallFontProps);

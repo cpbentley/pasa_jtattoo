@@ -44,11 +44,18 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
     private static final Properties modernSmallFontProps = new Properties();
     private static final Properties modernLargeFontProps = new Properties();
     private static final Properties modernGiantFontProps = new Properties();
+    
     private static final Properties pinkProps = new Properties();
     private static final Properties pinkSmallFontProps = new Properties();
     private static final Properties pinkLargeFontProps = new Properties();
     private static final Properties pinkGiantFontProps = new Properties();
 
+    private static final Properties pascalProps = new Properties();
+    private static final Properties pascalSmallFontProps = new Properties();
+    private static final Properties pascalLargeFontProps = new Properties();
+    private static final Properties pascalGiantFontProps = new Properties();
+
+    
     static {
         smallFontProps.setProperty("controlTextFont", "Dialog 10");
         smallFontProps.setProperty("systemTextFont", "Dialog 10");
@@ -116,6 +123,24 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
         pinkProps.setProperty("menuSelectionForegroundColor", "0 0 0");
         pinkProps.setProperty("menuSelectionBackgroundColor", "248 202 248");
         pinkProps.setProperty("desktopColor", "242 242 242");
+        
+        pascalProps.setProperty("backgroundColorLight", "255 220 180");
+        pascalProps.setProperty("backgroundColorDark", "240 240 240");
+        pascalProps.setProperty("focusCellColor", "255 125 80");
+        pascalProps.setProperty("selectionBackgroundColor", "255 125 80");
+        pascalProps.setProperty("rolloverColor", "255 125 80");
+        pascalProps.setProperty("controlColorLight", "255 215 0");
+        pascalProps.setProperty("controlColorDark", "232 120 0");
+        pascalProps.setProperty("rolloverColorLight", "255 215 0"); //main color gradient button
+        pascalProps.setProperty("rolloverColorDark", "232 120 0"); //color of gradient button
+        pascalProps.setProperty("windowTitleForegroundColor", "0 0 0");
+        pascalProps.setProperty("windowTitleBackgroundColor", "255 165 0");
+        pascalProps.setProperty("windowTitleColorLight", "255 125 80");
+        pascalProps.setProperty("windowTitleColorDark", "220 100 50");
+        pascalProps.setProperty("windowBorderColor", "200 120 200");
+        pascalProps.setProperty("menuSelectionForegroundColor", "40 40 40");
+        pascalProps.setProperty("menuSelectionBackgroundColor", "255 110 70");
+        pascalProps.setProperty("desktopColor", "255 125 80");
 
         String key;
         String value;
@@ -125,6 +150,7 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
             value = smallFontProps.getProperty(key);
             modernSmallFontProps.setProperty(key, value);
             pinkSmallFontProps.setProperty(key, value);
+            pascalSmallFontProps.setProperty(key, value);
         }
         iter = largeFontProps.keySet().iterator();
         while (iter.hasNext()) {
@@ -132,6 +158,7 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
             value = largeFontProps.getProperty(key);
             modernLargeFontProps.setProperty(key, value);
             pinkLargeFontProps.setProperty(key, value);
+            pascalLargeFontProps.setProperty(key, value);
         }
         iter = giantFontProps.keySet().iterator();
         while (iter.hasNext()) {
@@ -139,6 +166,7 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
             value = giantFontProps.getProperty(key);
             modernGiantFontProps.setProperty(key, value);
             pinkGiantFontProps.setProperty(key, value);
+            pascalGiantFontProps.setProperty(key, value);
         }
 
         iter = modernProps.keySet().iterator();
@@ -157,33 +185,58 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
             pinkLargeFontProps.setProperty(key, value);
             pinkGiantFontProps.setProperty(key, value);
         }
-
-        themesList.add("Default");
+        
+        iter = pascalProps.keySet().iterator();
+        while (iter.hasNext()) {
+            key = (String) iter.next();
+            value = pascalProps.getProperty(key);
+            pascalSmallFontProps.setProperty(key, value);
+            pascalLargeFontProps.setProperty(key, value);
+            pascalGiantFontProps.setProperty(key, value);
+        }
         themesList.add("Small-Font");
+        themesList.add("Medium-Font");
         themesList.add("Large-Font");
         themesList.add("Giant-Font");
-
-        themesList.add("Modern");
+        
+        themesList.add(THEME_SEPARATOR);
+        
+        themesList.add("Pascal-Small-Font");
+        themesList.add("Pascal-Medium-Font");
+        themesList.add("Pascal-Large-Font");
+        themesList.add("Pascal-Giant-Font");
+        
+        themesList.add(THEME_SEPARATOR);
+        
         themesList.add("Modern-Small-Font");
+        themesList.add("Modern-Medium-Font");
         themesList.add("Modern-Large-Font");
         themesList.add("Modern-Giant-Font");
 
-        themesList.add("Pink");
+        themesList.add(THEME_SEPARATOR);
+        
         themesList.add("Pink-Small-Font");
+        themesList.add("Pink-Medium-Font");
         themesList.add("Pink-Large-Font");
         themesList.add("Pink-Giant-Font");
+    
 
-        themesMap.put("Default", defaultProps);
+        themesMap.put("Medium-Font", defaultProps);
         themesMap.put("Small-Font", smallFontProps);
         themesMap.put("Large-Font", largeFontProps);
         themesMap.put("Giant-Font", giantFontProps);
 
-        themesMap.put("Modern", modernProps);
+        themesMap.put("Pascal-Medium-Font", pascalProps);
+        themesMap.put("Pascal-Small-Font", pascalSmallFontProps);
+        themesMap.put("Pascal-Large-Font", pascalLargeFontProps);
+        themesMap.put("Pascal-Giant-Font", pascalGiantFontProps);
+        
+        themesMap.put("Modern-Medium-Font", modernProps);
         themesMap.put("Modern-Small-Font", modernSmallFontProps);
         themesMap.put("Modern-Large-Font", modernLargeFontProps);
         themesMap.put("Modern-Giant-Font", modernGiantFontProps);
 
-        themesMap.put("Pink", pinkProps);
+        themesMap.put("Pink-Medium-Font", pinkProps);
         themesMap.put("Pink-Small-Font", pinkSmallFontProps);
         themesMap.put("Pink-Large-Font", pinkLargeFontProps);
         themesMap.put("Pink-Giant-Font", pinkGiantFontProps);

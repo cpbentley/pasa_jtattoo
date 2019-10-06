@@ -325,25 +325,35 @@ public class SmartLookAndFeel extends AbstractLookAndFeel {
         themesList.add("Large-Font");
         themesList.add("Giant-Font");
 
+        themesList.add(THEME_SEPARATOR);
+
         themesList.add("Gold");
         themesList.add("Gold-Small-Font");
         themesList.add("Gold-Large-Font");
         themesList.add("Gold-Giant-Font");
+
+        themesList.add(THEME_SEPARATOR);
 
         themesList.add("Green");
         themesList.add("Green-Small-Font");
         themesList.add("Green-Large-Font");
         themesList.add("Green-Giant-Font");
 
+        themesList.add(THEME_SEPARATOR);
+
         themesList.add("Brown");
         themesList.add("Brown-Small-Font");
         themesList.add("Brown-Large-Font");
         themesList.add("Brown-Giant-Font");
 
+        themesList.add(THEME_SEPARATOR);
+
         themesList.add("Lemmon");
         themesList.add("Lemmon-Small-Font");
         themesList.add("Lemmon-Large-Font");
         themesList.add("Lemmon-Giant-Font");
+
+        themesList.add(THEME_SEPARATOR);
 
         themesList.add("Gray");
         themesList.add("Gray-Small-Font");
